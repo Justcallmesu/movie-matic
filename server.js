@@ -2,28 +2,27 @@
 const path = require("path");
 
 // NPM
-const mysql = require("mysql");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+
+// environment extract
+dotenv.config({ path: path.join(__dirname, "./.env") });
 
 // App instace
 const app = require(path.join(__dirname, "./app.js"));
 
-// MYSQL Connection
-const connection = mysql.createConnection({
-    database: "movie_matic",
-    user: "root",
-    password: "",
-    connectTimeout: 10000, // Database Timeout setelah 10 detik
-    host: "localhost"
-});
+// Koneksi Mongodb
+(async function () {
+    try {
+        await mongoose.connect("mongodb://localhost:27017/moviematic");
+        console.log("Database Connected");
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+})();
 
-// Inisiasi Koneksi Dengan MYSQL
-connection.connect((error) => {
-    if (error) throw error;
-    console.log("Connected");
-});
 
 app.listen(3000, () => {
-    console.log("Server Is listening at http://localhost:3000");
+    console.log("Server is Listening at http://localhost:3000");
 })
-
-module.exports = { connection };
