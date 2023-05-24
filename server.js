@@ -9,7 +9,7 @@ const dotenv = require("dotenv");
 dotenv.config({ path: path.join(__dirname, "./.env") });
 
 // App instace
-const app = require(path.join(__dirname, "./app.js"));
+const { app } = require(path.join(__dirname, "./app.js"));
 
 // Koneksi Mongodb
 (async function () {
@@ -17,7 +17,6 @@ const app = require(path.join(__dirname, "./app.js"));
         await mongoose.connect("mongodb://localhost:27017/moviematic");
         console.log("Database Connected");
     } catch (error) {
-        console.log(error);
         throw error;
     }
 })();

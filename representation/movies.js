@@ -1,8 +1,11 @@
 // Module
 const path = require("path");
 
+// Class
+const ErrorResponse = require("../modules/Error");
+
+// Models
 const movies = require(path.join(__dirname, "../resources/movies.js"));
-const users = require(path.join(__dirname, "../resources/users.js"));
 
 exports.getMovies = async (req, res) => {
     const moviesData = await movies.find();
@@ -12,20 +15,21 @@ exports.getMovies = async (req, res) => {
     })
 };
 
-exports.postMovies = async (req, res) => {
+exports.postMovies = async (req, res, next) => {
     const { body } = req;
+    if (!Object.keys(body).length) return next(new ErrorResponse(400, "Harus memiliki body"));
 
-    if (!("email" in body)) return res.status(400).json({ status: 400, message: "body harus memiliki email" });
+    const { jam_tayang, ...moviesData } = Object.keys(body).reduce((acc, values) => {
+        try {
+            return { ...acc, [values]: JSON.parse(body[values]) };
+        } catch {
+            return { ...acc, [values]: body[values] };
+        }
+    }, {});
 
-    const foundUser = users.findOne({ email: body.email });
+    console.log(moviesData);
 
-    if (!foundUser) return res.status(400).json({ status: 404, message: "User tidak ditemukan" });
-
-    if (foundUser.role !== 'admin') return res.status(400).json({ status: 400, message: "Kamu tidak memiliki akses" });
-
-    const { email, ...movieData } = body;
-
-    const status = await movies.create(movieData);
+    const status = await movies.create({ jam_tayang: [...jam_tayang], ...moviesData });
 
     return res.status(200).json({ status: 200, message: "Film Berhasil Ditambahkan", data: status });
 }

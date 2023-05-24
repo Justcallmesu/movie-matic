@@ -6,3 +6,5 @@ class Reponse {
     }
 
 }
+
+module.exports = Response;

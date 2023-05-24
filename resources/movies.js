@@ -9,14 +9,7 @@ const moviesSchema = mongoose.Schema({
         type: Number,
         required: [true, "Film Harus memiliki durasi"]
     },
-    jam_tayang: {
-        type: [
-            {
-                Type: String,
-                required: ['Film Harus memiliki jam tayang']
-            }
-        ]
-    },
+    jam_tayang: [String],
     harga_tiket: {
         type: Number,
         required: [true, "Film harus memiliki jam tayang"]
