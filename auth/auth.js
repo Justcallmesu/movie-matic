@@ -1,5 +1,9 @@
-const jwt = require("jsonwebtoken");
+// Modules
 const path = require("path");
+
+// NPM
+const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 
 // class
 const ErrorResponse = require(path.join(__dirname, "../modules/error.js"));
@@ -26,5 +30,10 @@ exports.isAdmin = async (req, res, next) => {
     } catch (error) {
         return next(error)
     }
+};
 
+exports.isValidObjectId = (req, res, next) => {
+    const { params: { _id } } = req;
+    if (!mongoose.Types.ObjectId.isValid(_id)) return next(new ErrorResponse(400, "Id yang digunakan tidak valid"));
+    next();
 }

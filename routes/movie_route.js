@@ -6,13 +6,13 @@ const express = require("express");
 const asyncErrorHandler = require("../Error/AsyncErrorHandler");
 
 // auth
-const { isAdmin } = require(path.join(__dirname, "../auth/auth.js"));
+const { isAdmin, isValidObjectId } = require(path.join(__dirname, "../auth/auth.js"));
 
 // error Handler
 const AsyncErrorHandler = require(path.join(__dirname, "../Error/AsyncErrorHandler.js"));
 
 // Controller
-const { getMovies, postMovies, updateMovie, deleteMovie } = require(path.join(__dirname, "../representation/movies.js"));
+const { getMovies, getOneMovie, postMovies, updateMovie, deleteMovie } = require(path.join(__dirname, "../representation/movies.js"));
 
 // multer
 const { upload } = require(path.join(__dirname, "../app.js"));
@@ -25,6 +25,8 @@ const router = express.Router();
 
 router.route("/")
     .get(getMovies);
+router.route("/:_id")
+    .get(isValidObjectId, asyncErrorHandler(getOneMovie));
 
 
 router.use(isAdmin);
@@ -33,6 +35,8 @@ router.route("/")
     .post(upload.single("poster_film"),
         asyncErrorHandler(savePictures),
         AsyncErrorHandler(postMovies));
+
+router.use(isValidObjectId);
 router.route("/:_id")
     .patch(upload.single("poster_film"),
         asyncErrorHandler(savePictures),

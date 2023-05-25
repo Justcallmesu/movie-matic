@@ -19,6 +19,16 @@ exports.getMovies = async (req, res) => {
     })
 };
 
+exports.getOneMovie = async (req, res, next) => {
+    const { params: { _id } } = req;
+    const moviesData = await movies.findOne({ _id });
+
+    if (!moviesData) return next(new ErrorResponse(404, "Film Tidak Ditemukan"));
+
+    res.status(200).json(new Response(200, "Film Ditemukan", moviesData));
+
+}
+
 exports.postMovies = async (req, res, next) => {
     const { body } = req;
     if (!Object.keys(body).length) return next(new ErrorResponse(400, "Harus memiliki body"));
