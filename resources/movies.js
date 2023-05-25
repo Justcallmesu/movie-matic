@@ -25,6 +25,10 @@ const moviesSchema = mongoose.Schema({
     poster_film: {
         type: String,
         required: [true, "Film harus memiliki gambar"]
+    },
+    trailer: {
+        type: String,
+        required: [true, "Film harus memiliki URL Trailer"]
     }
 });
 

@@ -26,7 +26,6 @@ exports.getOneMovie = async (req, res, next) => {
     if (!moviesData) return next(new ErrorResponse(404, "Film Tidak Ditemukan"));
 
     res.status(200).json(new Response(200, "Film Ditemukan", moviesData));
-
 }
 
 exports.postMovies = async (req, res, next) => {
