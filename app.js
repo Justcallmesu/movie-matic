@@ -21,6 +21,7 @@ module.exports = { upload };
 const GlobalErrorHandler = require(path.join(__dirname, "./Error/GlobalErrorHandler.js"));
 
 // Middleware
+app.use(express.static("assets"))
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
