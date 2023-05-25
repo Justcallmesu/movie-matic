@@ -38,15 +38,16 @@ exports.login = async (req, res) => {
 
     if (!isExist) return res.status(409).json({ status: 400, message: "username atau password salah" });
     if (!await isExist.comparePassword(body.password)) return res.status(409).json({ status: 400, message: "username atau password salah" });
+
     res.cookie("userToken", jwt.sign(
         {
             _id: isExist._id
-        }, process.env.jwtsecret,
-        {
-            expiresIn: process.env.tokenExpire
-        }),
-        {
-            maxAge: process.env.tokenExpire
-        });
-    return res.status(200).json({ status: 200, message: "Login Berhasil", data: {} });
+        }, process.env.jwtsecret)
+    );
+
+    return res.status(200).json({
+        status: 200, message: "Login Berhasil", data: {
+            userId: isExist._id
+        }
+    });
 }

@@ -16,10 +16,15 @@ function constructError(err) {
 
         return new ErrorResponse(400, message);
     }
+
+    if (err.type === "entity.parse.failed") {
+        return new ErrorResponse(400, "JSON tidak valid");
+    }
 }
 
 function GlobalErrorHandler(err, req, res, next) {
-    const error = err?.statusCode ? err : constructError(err);
+    const error = err?.isCustom ? err : constructError(err);
+    console.log(err);
     res.status(error.statusCode).json(error);
 }
 
